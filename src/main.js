@@ -165,7 +165,7 @@ function uploadToFirebase(folder, file) {
 	var imageRef = imagesRef.child(file.name);
 
 	uploadImage(imageRef, file);
-});
+}
 
 function uploadImage(imageRef, file) {
     var progressBar = document.getElementById("progressBar");
