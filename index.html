@@ -1,71 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Adamas Admission Portal</title>
-    <link rel="stylesheet" href="src/style.css">
-
+	<title>Adamas</title>
+	<link rel="stylesheet" type="text/css" href="src/style.css">
 </head>
-
 <body>
-    <div class="container">
-        <h1>ADAMAS</h1>
-        <form id="admissionForm">
-            <div class="form-group">
-                <label for="name">General Information</label>
-                <input type="text" id="name" name="name" placeholder="Name" required>
-            </div>
-
-            <div class="form-group">
-                <label for="photo">Upload Your Recent Passport Size Photograph</label>
-                <div class="file-upload">
-                    <div class="file-upload-btn">
-                        <span>Upload</span>
-                        <input type="file" id="photo" name="photo" accept="jpg, png, jpeg" required>
-                    </div>
-                    <div class="file-upload-info">
-                        Allowed Format: Jpg, png, Jpeg.
-                    </div>
-                </div>
-                <div class="file-upload-name">
-
-                </div>
-                <div class="file-upload-size">
-
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="signature">Upload Your Recent Signature</label>
-                <div class="file-upload">
-                    <div class="file-upload-btn">
-                        <span>Upload</span>
-                        <input type="file" id="signature" name="signature" accept="jpg, png, jpeg" required>
-                    </div>
-                    <div class="file-upload-info">
-                        Allowed Format: Jpg, png, Jpeg.
-                    </div>
-                </div>
-                <div class="file-upload-name">
-
-                </div>
-                <div class="file-upload-size">
-
-                </div>
-            </div>
-
-            <div class="form-group">
-
-            </div>
-            <div class="form-group">
-                <button type="button" onclick="submitForm()">Submit</button>
-            </div>
-        </form>
-    </div>
+	<h1>Upload Your Documents</h1>
+	<input type="file" id="imageInput" accept="image/*">
+	<button id="uploadButton">Upload</button>
+	<div id="progressBarContainer">
+		<progress id="progressBar" value="0" max="100"></progress>
+	</div>
+    
+	<script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-storage.js"></script>
+	<script src="src/main.js"></script>
 </body>
-
-<script src="main.js"></script>
-
 </html>
