@@ -162,14 +162,28 @@ function uploadToFirebase(folder, file) {
   var storage = firebase.storage();
   var imagesRef = storage.ref(folder);
 
-  var imageRef = imagesRef.child(file.name);
+	var imageRef = imagesRef.child(file.name);
 
-  // Upload the image to the respective folder in Firebase Storage
-  imageRef.put(file).then(function(snapshot) {
-    snapshot.ref.getDownloadURL().then(function(downloadURL) {
-      console.log(`Image uploaded successfully to ${folder} folder: ${downloadURL}`);
+	uploadImage(imageRef, file);
+});
+
+function uploadImage(imageRef, file) {
+    var progressBar = document.getElementById("progressBar");
+  
+    imageRef.put(file).then(function(snapshot) {
+      snapshot.ref.getDownloadURL().then(function(downloadURL) {
+        console.log("Image uploaded successfully: " + downloadURL);
+  
+        // Display an alert after successfully uploading the picture
+        alert("Image uploaded successfully: " + downloadURL);
+      });
+    }).catch(function(error) {
+      console.error("Error uploading image: " + error);
+      alert("Error uploading image: " + error); // Display an alert in case of an error
+    }).on("state_changed", function(snapshot) {
+      var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+  
+      progressBar.value = progress;
     });
-  }).catch(function(error) {
-    console.error(`Error uploading image to ${folder} folder: ${error}`);
-  });
-}
+  }
+  
