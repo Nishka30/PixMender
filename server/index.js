@@ -1,7 +1,4 @@
-// const express = require('express');
-// const admin = require('firebase-admin');
-// const bodyParser = require('body-parser');
-// const cors = require('cors');
+
 
 // const serviceAccount = require('../imageupload-51b05-firebase-adminsdk-kqzpz-2a54bc5e8c.json');
 // const bucketName = 'gs://imageupload-51b05.appspot.com'; // Replace with your actual bucket name
@@ -101,6 +98,8 @@
 // app.listen(PORT, () => {
 //   console.log(`Server is running on http://localhost:${PORT}`);
 // });
+
+// server.js
 
 const express = require('express');
 const admin = require('firebase-admin');

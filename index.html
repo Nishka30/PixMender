@@ -1,61 +1,54 @@
+<!-- index.html -->
+
 <!DOCTYPE html>
 <html>
 
 <head>
-	<title>Adamas</title>
-	<link rel="stylesheet" type="text/css" href="src/style.css" />
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
-	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
+  <title>Adamas</title>
+  <link rel="stylesheet" type="text/css" href="src/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
 </head>
 
 <body>
-	<div class="container">
-		<div class="header">
-			<img src="src/ADAMAS_logo.png" alt="Adamas logo" class="logo" />
-		</div>
-		<div class="top-buttons">
-			<button class="button-circle">
-				<i class="fas fa-info-circle"></i>
-				<span class="official-font">General Information</span>
-			</button>
-			<button class="button-circle">
-				<i class="fas fa-graduation-cap"></i>
-				<span class="official-font">Academic Qualification</span>
-			</button>
-			<button class="button-circle">
-				<i class="fas fa-upload"></i>
-				<span class="official-font">Upload Documents</span>
-			</button>
-			<button class="button-circle">
-				<i class="fas fa-file-signature"></i>
-				<span class="official-font">Declaration</span>
-			</button>
-		</div>
+  <div class="container">
+    <div class="header">
+      <img src="src/ADAMAS_logo.png" alt="Adamas logo" class="logo" />
+    </div>
+    <div class="top-buttons">
+      <button class="button-circle">
+        <i class="fas fa-info-circle"></i>
+        <span class="official-font">General Information</span>
+      </button>
+      <button class="button-circle">
+        <i class="fas fa-graduation-cap"></i>
+        <span class="official-font">Academic Qualification</span>
+      </button>
+      <button class="button-circle">
+        <i class="fas fa-upload"></i>
+        <span class="official-font">Upload Documents</span>
+      </button>
+      <button class="button-circle">
+        <i class="fas fa-file-signature"></i>
+        <span class="official-font">Declaration</span>
+      </button>
+    </div>
 
-		<h1>ADAMAS</h1>
-		<p style="color: red; font-weight: bold; font-size: 1.2em;">Upload Documents</p>
+    <h1>ADAMAS</h1>
+    <p style="color: red; font-weight: bold; font-size: 1.2em;">Upload Documents</p>
 
-		<div class="upload-documents">
-			<div class="photo-upload">
-				<p><b>Upload Your Recent Passport Size Photograph *</b></p>
-				<label for="photo-input">
-					<input type="file" id="imageInput" accept="image/*" />
-                  <button id="uploadButton">Upload</button>
-				</label>
-				<p class="allowed-format">Allowed Format: Pdf, Jpg, Png, Jpeg.</p>
-			</div>
-
-			<div class="signature-upload">
-				<p><b>Upload Your Recent Signature *</b></p>
-				<label for="signature-input">
-					<input type="file" id="imageInput" accept="image/*" />
-                  <button id="uploadButton">Upload</button>
-				</label>
-				<p class="allowed-format">Allowed Format: Pdf, Jpg, Png, Jpeg.</p>
-			</div>
-		</div>
-	</div>
-
+    <div class="upload-documents">
+      <div class="photo-upload">
+        <p><b>Upload Your Recent Passport Size Photograph *</b></p>
+        <label for="photo-input">
+          <input type="file" id="imageInput" accept="image/*">
+          <button onclick="uploadImage()">Upload and Query</button>
+          <div id="result"></div>
+        </label>
+        <p class="allowed-format">Allowed Format: Pdf, Jpg, Png, Jpeg.</p>
+      </div>
+    </div>
+  </div>
 </body>
 <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-storage.js"></script>
