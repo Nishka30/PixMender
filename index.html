@@ -6,11 +6,10 @@
 </head>
 <body>
 	<h1>Upload Your Documents</h1>
-	<input type="file" id="imageInput" accept="image/*">
-	<button id="uploadButton">Upload</button>
-	<div id="progressBarContainer">
-		<progress id="progressBar" value="0" max="100"></progress>
-	</div>
+    <input type="file" id="imageInput" accept="image/*">
+    <button onclick="uploadImage()">Upload and Query</button>
+    <div id="result"></div>
+  
     
 	<script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
 	<script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-storage.js"></script>
