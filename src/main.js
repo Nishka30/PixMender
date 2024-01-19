@@ -116,11 +116,9 @@ var fileInput = document.getElementById("imageInput");
 var file = fileInput.files[0];
 
 if (file) {
-  // Use FormData to send the file directly to the API
   var formData = new FormData();
   formData.append("file", file);
 
-  // Make the API call
   fetch('http://localhost:3000/uploadAndQuery', {
     method: 'POST',
     body: formData,
