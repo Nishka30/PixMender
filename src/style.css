@@ -114,6 +114,8 @@ body {
 	border-radius: 5px;
 	position: relative;
 	flex: 1;
+	border-bottom-left-radius: 0px !important;
+	border-bottom-right-radius: 0px !important;
 	margin-top: 0;
   }
   
@@ -129,6 +131,8 @@ body {
 	background-color: #4a86e8;
 	color: #fff;
 	padding: 10px 20px;
+	border-top-left-radius: 0px !important;
+	border-top-right-radius: 0px !important;
 	border-radius: 5px;
 	cursor: pointer;
 	position: absolute;
@@ -156,7 +160,8 @@ body {
 
   .header {
     height: 60px;
-    background-color: #fff;
+	margin-top: -20px;
+	margin-left: -20px;
     position: relative;
 }
 

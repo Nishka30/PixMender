@@ -8,6 +8,7 @@
   <link rel="stylesheet" type="text/css" href="src/style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="icon" href="src/ADAMAS_logo.png" type="image/x-icon">
 </head>
 
 <body>
@@ -40,12 +41,13 @@
     <div class="upload-documents">
       <div class="photo-upload">
         <p><b>Upload Your Recent Passport Size Photograph and Signature *</b></p>
+
         <label for="photo-input">
-          <input type="file" id="imageInput" accept="image/*">
-          <button onclick="uploadImage()">Upload and Query</button>
+          <input style="margin: 20px; transform: scale(1.4);" type="file" id="imageInput" accept="image/*">
+          <button  onclick="uploadImage()" style="margin: 20px; transform: scale(1.4);">Upload</button>
           <div id="result"></div>
         </label>
-        <p class="allowed-format">Allowed Format: Pdf, Jpg, Png, Jpeg.</p>
+        <p class="allowed-format"><i>Allowed Format: Jpg, Png, Jpeg.<i></p>
       </div>
     </div>
   </div>
