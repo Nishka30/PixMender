@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photo Builder</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
+
+    <div class="container mt-4">
+        <div class="row mt-4">
+            <div class="col-md-12 card mt-4">
+                <form>
+                    <div class="form-group">
+                        <label for="fileInput">Select a File: </label> 
+                        <input id="fileInput" class="form-control" type="file">
+                    </div>
+                    <button class="btn btn-primary m-1" type="button" onclick="submitHandler()">Upload</button>
+                    <button class="btn btn-warning" onclick="downloadFile()">Download</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Preview Modal -->
+    <div class="modal fade" id="previewModal" tabindex="-1" role="dialog" aria-labelledby="previewModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="previewModalLabel">Preview</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modalBody">
+                    <!-- Images and information will be displayed here -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button class="btn btn-warning" onclick="downloadFile()">Download</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+
+<script>
+    // Existing functions
+
+    let imageURL; // Declare imageURL globally
+
+function submitHandler() {
+    const fileInput = document.getElementById('fileInput');
+    const image = fileInput.files[0];
+    const formData = new FormData();
+    formData.append('image_file', image);
+    formData.append('size', 'auto');
+    const apiKey = 'TNSW3K7GW9EL5yocJKRGe1uF';
+
+    const backgroundColor = '#699CE0 '; // Change this to the desired color
+
+    fetch('https://api.remove.bg/v1.0/removebg', {
+        method: 'POST',
+        headers: {
+            'X-Api-Key': apiKey
+        },
+        body: formData
+    })
+        .then(response => response.blob())
+        .then(blob => {
+            const url = URL.createObjectURL(blob);
+            imageURL = url;
+
+            // Create a canvas element
+            const canvas = document.createElement('canvas');
+            const context = canvas.getContext('2d');
+
+            // Set canvas dimensions
+            canvas.width = 400; // Adjust width as needed
+            canvas.height = canvas.width / 0.75; // Adjust height as needed
+
+            // Create an image element and load the URL
+            const img = new Image();
+            img.src = url;
+
+            // Once the image is loaded, draw it onto the canvas with the background color
+            img.onload = function () {
+                context.fillStyle = backgroundColor;
+                context.fillRect(0, 0, canvas.width, canvas.height);
+                context.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+                // Convert canvas to data URL
+                const canvasDataURL = canvas.toDataURL('image/png');
+
+                // Set the modified imageURL
+                imageURL = canvasDataURL;
+
+                // Display the preview in the modal
+                const imgPreview = document.createElement('img');
+                imgPreview.src = canvasDataURL;
+                imgPreview.className = 'img-fluid';
+
+                const containerDiv = document.createElement('div');
+                containerDiv.appendChild(imgPreview);
+
+                document.getElementById('modalBody').innerHTML = '';
+                document.getElementById('modalBody').appendChild(containerDiv);
+
+                // Show the modal
+                $('#previewModal').modal('show');
+            };
+        })
+        .catch(error => console.error('Error:', error));
+}
+
+function downloadFile() {
+    if (imageURL) {
+        var anchorElement = document.createElement('a');
+        anchorElement.href = imageURL;
+        anchorElement.download = 'Changed_Image.png';
+        document.body.appendChild(anchorElement);
+
+        anchorElement.click();
+
+        document.body.removeChild(anchorElement);
+    } else {
+        console.error('No image URL available for download.');
+    }
+}
+</script>
+
+
+</body>
+</html>
