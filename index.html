@@ -1,14 +1,67 @@
-<!-- index.html -->
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Adamas</title>
   <link rel="stylesheet" type="text/css" href="src/style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
   <link rel="icon" href="src/ADAMAS_logo.png" type="image/x-icon">
+  <style>
+    /* Add this style to your existing styles or create a new CSS file */
+
+    #imagePreviewContainer {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    #imagePreviewContainer img {
+      max-width: 150px; /* Set the maximum width for the image preview */
+      max-height: 150px; /* Set the maximum height for the image preview */
+      border: 1px solid #ddd; /* Add a border for better visibility */
+      border-radius: 4px; /* Add border-radius for rounded corners */
+      cursor: pointer; /* Add cursor pointer for better user experience */
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgb(0, 0, 0);
+      background-color: rgba(0, 0, 0, 0.9);
+    }
+
+    .modal-content {
+      margin: 5% auto;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .modal-content img {
+      max-width: 80%;
+      max-height: 80%;
+    }
+
+    .close {
+      color: #fff;
+      position: absolute;
+      top: 10px;
+      right: 25px;
+      font-size: 30px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
 </head>
 
 <body>
@@ -35,27 +88,157 @@
       </button>
     </div>
 
-    <h1>ADAMAS</h1>
-    <p style="color: red; font-weight: bold; font-size: 1.2em;">Upload Documents</p>
+    <p style="margin-top: 60px; color: red; font-weight: bold; font-size: 1.2em;">Upload Documents*</p>
 
     <div class="upload-documents">
       <div class="photo-upload">
 
         <p><b>Upload Your Recent Passport Size Photograph and Signature *</b></p>
-
         <label for="photo-input">
-          <input style="margin: 20px; transform: scale(1.4);" type="file" id="imageInput" accept="image/*">
-          <button  onclick="uploadImage()" style="margin: 20px; transform: scale(1.4);">Upload</button>
+          <input style="margin: 20px; transform: scale(1.4);" type="file" id="imageInput" accept="image/*" multiple>
+          <button onclick="uploadImage()" style="margin: 20px; transform: scale(1.4);">Upload</button>
           <div id="result"></div>
+          <div id="imagePreviewContainer"></div>
         </label>
-        <p class="allowed-format"><i>Allowed Format: Jpg, Png, Jpeg.<i></p>
+        <p class="allowed-format"><i>Allowed Format: Jpg, Png, Jpeg.</i></p>
+        <p style = "color: red;"class="allowed-format"><i>Maximum Size Limit is 4MB</i></p>
+        <!-- Add a Preview button -->
+    
       </div>
     </div>
   </div>
-</body>
-<script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-storage.js"></script>
-<script src="src/main.js"></script>
-<script src="server/index.js"></script>
 
-</html>
+  <a href="pr/photo.html" target="_blank">
+    <button style="font-style: normal; background-color: rgb(203, 153, 153);" class="button-circle"><b>Photo Generator</b>
+    </button>
+  </a>
+  <a href="pr/sign.html" target="_blank">
+    <button style="font-style: normal; background-color: rgb(149, 149, 255);" class="button-circle"><b>Digital Signature</b>
+    </button>
+  </a>
+
+  <div class="tr">
+    <h6></h6>
+    <div style="border-radius:5px;" id="google_translate_element" class="xyz"></div>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <script type="text/javascript">
+      function googleTranslateElementInit() {
+        new google.translate.TranslateElement({
+          pageLanguage: 'en',
+          layout: google.translate.TranslateElement.InlineLayout.SIMPLE
+        }, 'google_translate_element');
+      }
+    </script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-storage.js"></script>
+    <script src="src/main.js"></script>
+    <script src="server/index.js"></script>
+
+    <!-- Modal for image preview -->
+    <div id="imageModal" class="modal">
+      <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <div id="modalImageContainer"></div>
+      </div>
+    </div>
+
+    <script>
+     
+  function uploadImage() {
+  var files = document.getElementById("imageInput").files;
+  var fileInput = document.getElementById("imageInput");
+  var files = fileInput.files;
+
+  if (files.length > 0) {
+    var formData = new FormData();
+
+    // Append each file to the formData and check file size
+    for (var i = 0; i < files.length; i++) {
+      var file = files[i];
+      if (file.size <= 4 * 1024 * 1024) { // Check if the file size is within 4 MB
+        formData.append("files", file);
+      } else {
+        console.error(`File ${file.name} exceeds the 4 MB size limit and will not be uploaded.`);
+        alert("File size is more than 4MB. Please choose a smaller file.");
+        return; // Exit the function if a file exceeds the limit
+      }
+    }
+
+    // Proceed with uploading valid files
+    if (formData.getAll("files").length > 0) {
+      fetch('http://localhost:3000/uploadAndQuery', {
+        method: 'POST',
+        body: formData,
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        // Upload all files to Firebase
+        uploadAllToFirebase(data, files);
+
+        // Display preview of all uploaded images with captions
+        for (var i = 0; i < files.length; i++) {
+          var file = files[i];
+          var imagePreview = document.createElement("img");
+
+          // Set image properties
+          imagePreview.src = URL.createObjectURL(file);
+          imagePreview.setAttribute("onclick", `showImagePreview('${imagePreview.src}', 'Caption for Image ${i + 1}')`);
+
+          // Append image to preview container
+          document.getElementById("imagePreviewContainer").appendChild(imagePreview);
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        document.getElementById('result').innerText = 'An error occurred while processing the images. Please try again.';
+      });
+    } else {
+      console.error('No valid files selected.');
+    }
+  } else {
+    console.error('No files selected.');
+  }
+}
+
+function showImagePreview(imageSrc, caption) {
+    // You can customize this function to display a larger preview as needed
+    alert("Clicked image preview: " + imageSrc + "\nCaption: " + caption);
+  }
+
+      function openModal() {
+        var modal = document.getElementById("imageModal");
+        var modalImageContainer = document.getElementById("modalImageContainer");
+        var imagePreviewContainer = document.getElementById("imagePreviewContainer").cloneNode(true);
+
+        // Remove the cursor pointer style from the cloned images to avoid confusion
+        var images = imagePreviewContainer.getElementsByTagName("img");
+        for (var i = 0; i < images.length; i++) {
+          images[i].style.cursor = "auto";
+        }
+
+        modalImageContainer.innerHTML = ""; // Clear the modal container
+        modalImageContainer.appendChild(imagePreviewContainer);
+        modal.style.display = "block";
+      }
+
+      function closeModal() {
+        var modal = document.getElementById("imageModal");
+        modal.style.display = "none";
+      }
+
+      // Close the modal if the user clicks outside of it
+      window.onclick = function (event) {
+        var modal = document.getElementById("imageModal");
+        if (event.target == modal) {
+          modal.style.display = "none";
+        }
+      };
+    </script>
+  </body>
+
+  </html>

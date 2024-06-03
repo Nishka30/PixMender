@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Signature Generator</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+    }
+
+    canvas {
+      display: block;
+      background-color: #fff;
+      border: 2px solid #000;
+      margin: 50px;
+    }
+
+    #eraseButton {
+      position: absolute;
+      top: 130px;
+      right: 10px;
+      padding: 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    #saveButton {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      padding: 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    #downloadSignatureButton {
+      position: absolute;
+      top: 70px;
+      right: 10px;
+      padding: 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="whiteboard" width="500" height="200"></canvas>
+  <button id="saveButton" onclick="saveImage()">Save Image</button>
+  <button id="downloadSignatureButton" onclick="downloadSignature()">Download Signature</button>
+  <a href="sign.html">
+    <button id="eraseButton" onclick="erase()">Erase</button>
+  </a>
+  <div id="downloadedSignatures"></div>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      var canvas = document.getElementById("whiteboard");
+      var context = canvas.getContext("2d");
+
+      var drawing = false;
+      var erasing = false;
+
+      canvas.addEventListener("mousedown", startDrawing);
+      canvas.addEventListener("mouseup", stopDrawing);
+      canvas.addEventListener("mousemove", draw);
+      canvas.addEventListener("touchstart", startDrawing);
+      canvas.addEventListener("touchend", stopDrawing);
+      canvas.addEventListener("touchmove", draw);
+
+      function startDrawing(e) {
+        drawing = true;
+        draw(e);
+      }
+
+      function stopDrawing() {
+        drawing = false;
+        context.beginPath();
+        erasing = false;
+      }
+
+      function draw(e) {
+        if (!drawing && !erasing) return;
+
+        var x, y;
+
+        if (e.touches) {
+          x = e.touches[0].clientX - canvas.offsetLeft;
+          y = e.touches[0].clientY - canvas.offsetTop;
+        } else {
+          x = e.clientX - canvas.offsetLeft;
+          y = e.clientY - canvas.offsetTop;
+        }
+
+        if (erasing) {
+          context.clearRect(x - 5, y - 5, 10, 10); // Clear a small area around the touch/mouse position
+        } else {
+          context.strokeStyle = "#000";
+          context.lineWidth = 5;
+          context.lineCap = "round";
+
+          if (drawing) {
+            context.lineTo(x, y);
+            context.stroke();
+            context.beginPath();
+            context.moveTo(x, y);
+          }
+        }
+      }
+
+      function erase() {
+        erasing = true;
+        context.fillStyle = "#fff";
+        context.fillRect(0, 0, canvas.width, canvas.height); // Fill the entire canvas with white color
+        context.beginPath();
+      }
+
+      function saveImage() {
+        try {
+          var dataURL = canvas.toDataURL("image/png");
+          localStorage.setItem("signature", dataURL);
+        } catch (e) {
+          if (e instanceof SecurityError) {
+            alert("Cannot save image due to cross-origin restrictions.");
+          } else {
+            console.error(e);
+          }
+        }
+      }
+
+      window.downloadSignature = function() {
+        try {
+          var dataURL = canvas.toDataURL("image/png");
+          var a = document.createElement("a");
+          a.href = dataURL;
+          a.download = "signature.png";
+          a.click();
+        } catch (e) {
+          if (e instanceof SecurityError) {
+            alert("Cannot download signature due to cross-origin restrictions.");
+          } else {
+            console.error(e);
+          }
+        }
+      };
+    });
+  </script>
+</body>
+</html>
